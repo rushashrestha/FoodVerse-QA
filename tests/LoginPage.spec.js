@@ -17,7 +17,7 @@ test("Login with valid credentials", async ({ page }) => {
   await login.validLogin(); //Action
   await login.clickLoginButton();
   // A: ASSERT, confirms login 
-  await expect(page).toHaveURL(process.env.BASE_URL);
+  await login.expectSuccess();
   console.log("Logged in");
 });
 
@@ -26,8 +26,7 @@ test("Login with invalid facility code", async ({ page }) => {
   await login.invalidFacilityCodeLogin();
   await login.clickLoginButton();
     //A: Assert
-  const toast = page.getByText(/invalid facility code/i);
-  await expect(toast).toBeVisible({ timeout: 1000 });
+  await login.expectToast("invalid facility code");
 });
 
 test("Login with invalid email", async ({ page }) => {
@@ -35,8 +34,7 @@ test("Login with invalid email", async ({ page }) => {
   await login.invalidEmailLogin();
   await login.clickLoginButton();
   //A: ASSERT
-  const toast = page.getByText(/user not registered/i);
-  await expect(toast).toBeVisible({ timeout: 8000 });
+  await login.expectToast("user not registered");
 });
 
 test("Login with invalid password", async ({ page }) => {
@@ -44,8 +42,7 @@ test("Login with invalid password", async ({ page }) => {
   await login.invalidPasswordLogin();
   await login.clickLoginButton();
   //A: ASSERT
-  const toast = page.getByText(/invalid credentials/i);
-  await expect(toast).toBeVisible({ timeout: 15000 });
+  await login.expectToast("invalid credentials");
 });
 
 test("Login with empty credentials", async ({ page }) => {
@@ -64,15 +61,12 @@ test("test login with SQL injection attempts", async ({ page }) => {
   await login.sqlInjectionLogin();
   await login.clickLoginButton();
   //Assert
-  const toast = page.getByText(
-    /value is not a valid email address: An email address must have an @-sign./i
-  );
-  await expect(toast).toBeVisible({ timeout: 8000 });
+  await login.expectToast("value is not a valid email address: An email address must have an @-sign.");
 });
 
 test("test login with XSS atempt", async ({ page }) => {
     //Act
   await login.xxsLogin();
   //Assert
-  await expect(page).not.toHaveURL(/alert/);
+  await login.expectToast("value is not a valid email address: The display name contains invalid characters when not quoted: '(', ')', '>'.");
 });

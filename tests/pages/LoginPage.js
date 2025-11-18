@@ -1,11 +1,12 @@
+import { expect } from "@playwright/test";
 import { CREDENTIALS } from "../fixtures/testData";
 
 export class LoginPage {
     constructor(page) {
         this.page = page;
-        this.facilityCode = page.getByPlaceholder("Enter your facility code");
-        this.email = page.getByPlaceholder("Enter email address");
-        this.password = page.getByPlaceholder("Enter password");
+        this.facilityCode = page.getByRole('textbox', { name: 'Facility Code' });
+        this.email = page.getByRole('textbox', { name: 'Email' });
+        this.password = page.getByRole('textbox', { name: 'Password' });
         this.loginButton = page.getByRole('button', { name: 'Login' });
     }
 
@@ -47,6 +48,14 @@ export class LoginPage {
 
     async xxsLogin(){
         await this.FacilityLogin(CREDENTIALS.security.xss.facilityCode, CREDENTIALS.security.xss.email, CREDENTIALS.security.xss.password);
+    }
+
+    async expectSuccess(){
+        await expect(this.page).toHaveURL(process.env.BASE_URL);
+    }
+
+    async expectToast(message, timeout = 5000){
+        await expect(this.page.getByText(new RegExp(message, "i"))).toBeVisible({ timeout });
     }
 
     
