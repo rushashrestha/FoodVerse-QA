@@ -68,5 +68,5 @@ test("test login with XSS atempt", async ({ page }) => {
     //Act
   await login.xxsLogin();
   //Assert
-  await login.expectToast("value is not a valid email address: The display name contains invalid characters when not quoted: '(', ')', '>'.");
+  await login.expectToast("value is not a valid email address: An email address must have an @-sign.");
 });
