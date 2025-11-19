@@ -22,6 +22,7 @@ export class LoginPage {
         await this.facilityCode.fill(code);
         await this.email.fill(email);
         await this.password.fill(password);
+        console.log("SQL injection login:", CREDENTIALS.valid.facilityCode, CREDENTIALS.security.sqlInjection.email, CREDENTIALS.valid.password);
     }
 
     async validLogin(){
@@ -43,11 +44,11 @@ export class LoginPage {
 
 
     async sqlInjectionLogin(){
-        await this.FacilityLogin(CREDENTIALS.security.sqlInjection.facilityCode, CREDENTIALS.security.sqlInjection.email, CREDENTIALS.security.sqlInjection.password);
+        await this.FacilityLogin(CREDENTIALS.valid.facilityCode, CREDENTIALS.security.sqlInjection.email, CREDENTIALS.valid.password);
     }
 
     async xxsLogin(){
-        await this.FacilityLogin(CREDENTIALS.security.xss.facilityCode, CREDENTIALS.security.xss.email, CREDENTIALS.security.xss.password);
+        await this.FacilityLogin(CREDENTIALS.security.xss.facilityCode, CREDENTIALS.security.xss.email, CREDENTIALS.valid.password);
     }
 
     async expectSuccess(){

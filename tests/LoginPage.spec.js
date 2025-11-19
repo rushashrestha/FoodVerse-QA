@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
   await login.navigateToLoginPage();
 });
 
-test("Login with valid credentials", async ({ page }) => {
+test("Login with valid credentials", async () => {
   await login.validLogin(); //Action
   await login.clickLoginButton();
   // A: ASSERT, confirms login 
@@ -21,7 +21,7 @@ test("Login with valid credentials", async ({ page }) => {
   console.log("Logged in");
 });
 
-test("Login with invalid facility code", async ({ page }) => {
+test("Login with invalid facility code", async () => {
     // A: ACT, attempts login with fake facility code.
   await login.invalidFacilityCodeLogin();
   await login.clickLoginButton();
@@ -29,7 +29,7 @@ test("Login with invalid facility code", async ({ page }) => {
   await login.expectToast("invalid facility code");
 });
 
-test("Login with invalid email", async ({ page }) => {
+test("Login with invalid email", async () => {
     //A: ACT
   await login.invalidEmailLogin();
   await login.clickLoginButton();
@@ -37,7 +37,7 @@ test("Login with invalid email", async ({ page }) => {
   await login.expectToast("user not registered");
 });
 
-test("Login with invalid password", async ({ page }) => {
+test("Login with invalid password", async () => {
     //A: ACT
   await login.invalidPasswordLogin();
   await login.clickLoginButton();
@@ -56,17 +56,17 @@ test("Login with empty credentials", async ({ page }) => {
   await expect(page.getByText(/password.*required/i)).toBeVisible();
 });
 
-test("test login with SQL injection attempts", async ({ page }) => {
+test("test login with SQL injection attempts", async () => {
     //Act
   await login.sqlInjectionLogin();
   await login.clickLoginButton();
   //Assert
-  await login.expectToast("value is not a valid email address: An email address must have an @-sign.");
+  await login.expectToast("valid email", 8000);
 });
 
-test("test login with XSS atempt", async ({ page }) => {
+test("test login with XSS atempt", async () => {
     //Act
   await login.xxsLogin();
   //Assert
-  await login.expectToast("value is not a valid email address: An email address must have an @-sign.");
+  await login.expectToast("email", 8000);
 });

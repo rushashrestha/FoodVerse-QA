@@ -16,14 +16,11 @@ export const CREDENTIALS = {
   },
   security: {
     sqlInjection: {
-      email: "admin' OR '1'='1",
-      facilityCode: process.env.FACILITY_CODE,
-      password: process.env.PASSWORD,
+      email: "admin' OR '1'='1"
     },
     xss: {
       facilityCode: "<script>alert('xss')</script>",
-      email: "<img src=x onerror=alert(1)>",
-      password: process.env.PASSWORD,
+      email: "<img src=x onerror=alert(1)>"
     },
   },
 };
