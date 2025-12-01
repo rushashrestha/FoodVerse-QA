@@ -25,7 +25,7 @@ export class LoginPage {
         await this.email.fill(email);
         await this.password.fill(password);
         // await this.clickLoginButton();
-        console.log("SQL injection login:", CREDENTIALS.valid.facilityCode, CREDENTIALS.security.sqlInjection.email, CREDENTIALS.valid.password);
+      
     }
 
     async validLogin(){
