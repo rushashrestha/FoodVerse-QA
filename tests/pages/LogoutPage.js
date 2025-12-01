@@ -3,11 +3,12 @@ import { expect } from "@playwright/test";
 export class LogoutPage {
     constructor(page){
         this.page = page;
-        this.profileIcon = page.getByRole('button', { name: 'Profile'});
+        this.profileIcon = page.getByRole('button', { name: 'Hukum Gosain Admin'});
         this.logoutButton = page.getByRole('menuitem', { name: 'Logout' });
     }
 
     async clickProfileIcon(){
+        await this.page.locator('.toast-class-or-selector').waitFor({ state: 'detached' });
         await this.profileIcon.click();
         await expect(this.page.getByRole('menuitem', { name: 'Logout' })).toBeVisible();
     }
