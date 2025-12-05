@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
 test("Login with valid credentials", async () => {
   await login.validLogin(); //Action
   // A: ASSERT, confirms login 
-  // await login.expectSuccess();
+  await login.expectSuccess();
   console.log("Logged in");
 });
 
@@ -45,20 +45,41 @@ test("Login with empty credentials", async ({ page }) => {
   await login.expectFailure();
 });
 
-test("test login with SQL injection attempts", async () => {
-    //Act
-  await login.sqlInjectionLogin();
-  //Assert
-  await login.expectToast("valid email", 8000);
-  await login.expectFailure();
+const sqlInjectionPayloads = [
+  "' OR '1'='1",
+  "' OR '1'='1' --",
+  "admin' --",
+  "' OR 1=1 --",
+  "'; DROP TABLE users; --",
+  "' UNION SELECT * FROM users --",
+];
+
+const xssPayloads = [
+  "<script>alert('XSS')</script>",
+  "<img src=x onerror=alert('XSS')>",
+  "javascript:alert('XSS')",
+  "<iframe src='javascript:alert(\"XSS\")'></iframe>",
+  "<svg onload=alert('XSS')>",
+  "'-alert(1)-'",
+  "\"><script>alert('XSS')</script>",
+];
+
+// Test each unique SQL injection payload
+sqlInjectionPayloads.forEach((payload, index) => {
+  test(`SQL injection attempt ${index + 1}: ${payload}`, async () => {
+    await login.sqlInjectionLogin(payload);
+    await login.expectToast("valid email", 8000);
+    await login.expectFailure();
+  });
 });
 
-test("test login with XSS atempt", async () => {
-    //Act
-  await login.xxsLogin();
-  //Assert
-  await login.expectToast("email", 8000);
-  await login.expectFailure();
+// Test each unique XSS payload
+xssPayloads.forEach((payload, index) => {
+  test(`XSS attempt ${index + 1}: ${payload}`, async () => {
+    await login.xssLogin(payload);
+    await login.expectToast("email", 8000);
+    await login.expectFailure();
+  });
 });
 
 

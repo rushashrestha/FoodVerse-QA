@@ -55,7 +55,7 @@ export class LoginPage {
         await this.clickLoginButton();
     }
 
-    async xxsLogin(){
+    async xssLogin(){
         await this.FacilityLogin(CREDENTIALS.security.xss.facilityCode, CREDENTIALS.security.xss.email, CREDENTIALS.valid.password);
         await this.clickLoginButton();
     }
